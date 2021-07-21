@@ -27,6 +27,6 @@ VALUES (1, 'Smelly cat', 'description',  'https://images.pexels.com/photos/20866
 -------------------------
 
 INSERT INTO property_reviews (guest_id, property_id, reservation_id, rating, message)
-VALUES (2, 5, 1, 3, 'messages'),
-(1, 3, 3, 6, 'messages'),
-(5, 6, 2, 3, 'messages');
+VALUES (2, 5, 13, 3, 'messages'),
+(1, 3, 14, 6, 'messages'),
+(5, 6, 15, 3, 'messages');
