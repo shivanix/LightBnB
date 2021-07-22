@@ -10,7 +10,7 @@ const pool = new Pool({
   database: 'lightbnb'
 });
 
-/*-------------------------------------------------- Users--------------------------------------*/
+/*------------------------------------ Users-----------------------------------*/
 
 /**
  * Get a single user from the database given their email.
@@ -44,7 +44,8 @@ const getUserWithEmail = function(email) {
 }
 exports.getUserWithEmail = getUserWithEmail;
 
-/*-------------------------------------Single user from db given their id-------------------------- */
+/*--------------------------Single user from db given their id----------------------- */
+
 /**
  * Get a single user from the database given their id.
  * @param {string} id The id of the user.
@@ -68,7 +69,7 @@ console.log("getuserIDDDD");
 exports.getUserWithId = getUserWithId;
 
 
-/*------------------------------------------Add new user to db---------------------------------*/
+/*------------------------------------Add new user to db------------------------------*/
 
 /**
  * Add a new user to the database.
@@ -105,12 +106,25 @@ exports.addUser = addUser;
  * @return {Promise<[{}]>} A promise to the reservations.
  */
 const getAllReservations = function(guest_id, limit = 10) {
-  return getAllProperties(null, 2);
-}
+  console.log("getallreservns########################");
+  return pool
+    .query(`SELECT * FROM reservations WHERE guest_id = $1 LIMIT $2`, [guest_id, limit])
+    .then((result) => {
+       //console.log(result.rows);
+      return result.rows;
+     
+    })
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+  
+  //return getAllProperties(null, 2);
+//}
 exports.getAllReservations = getAllReservations;
 
 
-/*-------------------------------------------- Properties----------------------------------------*/
+/*-------------------------------------- Properties-----------------------------------*/
 
 /**
  * Get all properties.
@@ -133,7 +147,7 @@ const getAllProperties = (options, limit = 10) => {
 exports.getAllProperties = getAllProperties;
 
 
-/*-------------------------------------Add property to db----------------------------------*/
+/*----------------------------------Add property to db-------------------------------*/
 
 /**
  * Add a property to the database
