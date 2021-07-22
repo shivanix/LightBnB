@@ -26,18 +26,30 @@ module.exports = function(router, database) {
   const login =  function(email, password) {
     return database.getUserWithEmail(email)
     .then(user => {
+      console.log("email: ", email, "password: ", password);
+
+      console.log("user#########: ", user);
+      
+      const comparePassword = bcrypt.compareSync(password, user.password);
+
+      console.log('Verification: ', comparePassword);
+
       if (bcrypt.compareSync(password, user.password)) {
+        console.log("user: ", user);
         return user;
       }
+      console.log("Verification of user/passwrd failed");
       return null;
     });
   }
   exports.login = login;
 
   router.post('/login', (req, res) => {
+    console.log("Accessing trying to login ######____---------");
     const {email, password} = req.body;
     login(email, password)
       .then(user => {
+        console.log("Accessing login funct ######____-----");
         if (!user) {
           res.send({error: "error"});
           return;
@@ -45,7 +57,11 @@ module.exports = function(router, database) {
         req.session.userId = user.id;
         res.send({user: {name: user.name, email: user.email, id: user.id}});
       })
-      .catch(e => res.send(e));
+      .catch(e =>{
+       console.log("We got an eror-------------", e);
+        res.send(e)
+
+      });
   });
   
   router.post('/logout', (req, res) => {
