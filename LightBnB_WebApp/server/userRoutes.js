@@ -7,15 +7,15 @@ module.exports = function(router, database) {
     const user = req.body;
     user.password = bcrypt.hashSync(user.password, 12);
     database.addUser(user)
-    .then(user => {
-      if (!user) {
-        res.send({error: "error"});
-        return;
-      }
-      req.session.userId = user.id;
-      res.send("🤗");
-    })
-    .catch(e => res.send(e));
+      .then(user => {
+        if (!user) {
+          res.send({error: "error"});
+          return;
+        }
+        req.session.userId = user.id;
+        res.send("🤗");
+      })
+      .catch(e => res.send(e));
   });
 
   /**
@@ -25,31 +25,30 @@ module.exports = function(router, database) {
    */
   const login =  function(email, password) {
     return database.getUserWithEmail(email)
-    .then(user => {
-      console.log("email: ", email, "password: ", password);
-
-      console.log("user#########: ", user);
+      .then(user => {
+      //console.log("email: ", email, "password: ", password);
+      //console.log("user#########: ", user);
       
-      const comparePassword = bcrypt.compareSync(password, user.password);
+        const comparePassword = bcrypt.compareSync(password, user.password);
 
-      console.log('Verification: ', comparePassword);
+        //console.log('Verification: ', comparePassword);
 
-      if (bcrypt.compareSync(password, user.password)) {
-        console.log("user: ", user);
-        return user;
-      }
-      console.log("Verification of user/passwrd failed");
-      return null;
-    });
-  }
+        if (bcrypt.compareSync(password, user.password)) {
+        //console.log("user: ", user);
+          return user;
+        }
+        //console.log("Verification of user/passwrd failed");
+        return null;
+      });
+  };
   exports.login = login;
 
   router.post('/login', (req, res) => {
-    console.log("Accessing trying to login ######____---------");
+    //console.log("Accessing trying to login ######____---------");
     const {email, password} = req.body;
     login(email, password)
       .then(user => {
-        console.log("Accessing login funct ######____-----");
+        //console.log("Accessing login funct ######____-----");
         if (!user) {
           res.send({error: "error"});
           return;
@@ -58,8 +57,8 @@ module.exports = function(router, database) {
         res.send({user: {name: user.name, email: user.email, id: user.id}});
       })
       .catch(e =>{
-       console.log("We got an eror-------------", e);
-        res.send(e)
+        //console.log("We got an eror-------------", e);
+        res.send(e);
 
       });
   });
@@ -89,4 +88,4 @@ module.exports = function(router, database) {
   });
 
   return router;
-}
+};
